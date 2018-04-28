@@ -1,10 +1,24 @@
 local PANEL = {}
 
 function PANEL:Init()
+
+    self.title = self:Add( "DLabel" )
+    self.title:SetText( "GAME OPTIONS" )
+    self.title:Dock( TOP )
+    self.title:SetFont( "goUILarge" )
+    self.title:SetTall( 32 )
+    self.title:SetTextInset( ScrW() * 0.25, 0 )
+    self.title:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
+    self.title:SetTextColor( color_white )
+
     self:Dock( FILL )
+    self:DockMargin( 0, 96, 0, 128 )
+    self:InvalidateParent( true )
 end
 
-function PANEL:Paint( w, h ) end
+function PANEL:Paint( w, h ) 
+    draw.RoundedBox( 0, 0, 32, w, h - 32, Color( 0, 0, 0, 150 ) )
+end
 
 local topRight = Material( "goui/button/button_topright.png" )
 local topRightW, topRightH = 16, 16
@@ -70,18 +84,18 @@ function PANEL:addTextEntry( parent, value )
     textEntry:SetValue( value )
     textEntry:SetFont( "goUIMedium" )
 
-    local color = Color( 50, 50, 50, 125 ) 
+    local color = Color( 0, 0, 0, 125 ) 
     textEntry.Paint = function( this, w, h )
         local isHovered = this:IsHovered()
 
         if isHovered then
-            draw.RoundedBox( 16, 0, 4, w, h - 8, Color( color.r, color.g, color.b, 100 ) )
+            draw.RoundedBox( 0, 0, 4, w, h - 8, Color( color.r, color.g, color.b, 100 ) )
         end
 
         local xPos = isHovered and 3 or 0
         local yPos = isHovered and 6 or 4
         local bWidth, bHeight = isHovered and w - 6 or w, isHovered and h - 12 or h - 8
-        draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( color.r, color.g, color.b, 255 ) )
+        draw.RoundedBox( 0, xPos, yPos, bWidth, bHeight, Color( color.r, color.g, color.b, 125 ) )
 
     	this:DrawTextEntryText( color_white, Color( 125, 0, 0, 125 ), Color( 200, 200, 200, 200 ) )
     end
@@ -105,12 +119,12 @@ function PANEL:addBoolean( parent, value )
         local desiredBoxColorInverted = not value and Color( activeColor.r, activeColor.g, activeColor.b, 200 ) or Color( notActiveColor.r, notActiveColor.g, notActiveColor.b, 100 )
 
         -- Yes
-        draw.RoundedBox( 16, 4, 4, w / 2 - 8, h - 8, desiredBoxColor )
+        draw.RoundedBox( 0, 0, 4, w / 2, h - 8, desiredBoxColor )
         draw.SimpleText( "YES", "goUIMedium-Secondary", ( w / 2 ) / 2, h / 2, not value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         
         -- No
-        draw.RoundedBox( 16, w / 2, 4, w / 2 - 8, h - 8, desiredBoxColorInverted )
-        draw.SimpleText( "NO", "goUIMedium-Secondary", w - ( ( w / 2 ) / 2 ) - 8 , h / 2, value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.RoundedBox( 0, w / 2, 4, w / 2, h - 8, desiredBoxColorInverted )
+        draw.SimpleText( "NO", "goUIMedium-Secondary", w - ( ( w / 2 ) / 2 ), h / 2, value and activeColor or notActiveColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
 
     button.DoClick = function( this )
@@ -133,17 +147,17 @@ function PANEL:addColor( parent, value )
     color.Paint = function( this, w, h )
         local isHovered = this:IsHovered()
 
-        draw.RoundedBox( 16, 1, 1, w - 2, h - 2, Color( 0, 0, 0, 150 ) )
+        draw.RoundedBox( 0, 1, 1, w - 2, h - 2, Color( 0, 0, 0, 150 ) )
 
         if isHovered then
-            draw.RoundedBox( 16, 6, 6, w - 12, h - 12, Color( value.r - 50, value.g - 50, value.b - 50, 255 ) )
+            draw.RoundedBox( 0, 6, 6, w - 12, h - 12, Color( value.r - 50, value.g - 50, value.b - 50, 125 ) )
         end
 
         local xPos = isHovered and 5 or 4
         local yPos = isHovered and 5 or 4
         local bWidth, bHeight = isHovered and w - 10 or w - 8, isHovered and h - 10 or h - 8
 
-        draw.RoundedBox( 16, xPos, yPos, bWidth, bHeight, Color( value.r, value.g, value.b, 255 ) )
+        draw.RoundedBox( 0, xPos, yPos, bWidth, bHeight, Color( value.r, value.g, value.b, 125 ) )
 
         surface.SetMaterial( mixerMat )
         surface.SetDrawColor( Color( 0, 0, 0, 150 ) )
@@ -218,7 +232,7 @@ function PANEL:showEdit( varName, varInfo )
 
     local title = self.optionPanel:Add( "DLabel" )
     title:Dock( TOP )
-    title:SetText( varInfo and varInfo.data and varInfo.data.niceName and varInfo.data.niceName:upper() or varName:upper() )
+    title:SetText( varInfo and varInfo.data and varInfo.data.niceName and varInfo.data.niceName or varName )
     title:SetFont( "goUIHuge-Secondary" )
     title:SetTextColor( color_white )
     title:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
@@ -240,9 +254,9 @@ function PANEL:fillOptions( categoryId )
     self.optionList:Dock( LEFT )
     self.optionList:SetWide( self:GetWide() / 2 )
 
-    self.optionPanel = self.panel:Add( "Panel" )
-    self.optionPanel:Dock( FILL )
-    self.optionPanel:DockMargin( 32, 0, 0, 0 )
+    self.optionPanel = self.outerPanel:Add( "Panel" )
+    self.optionPanel:Dock( RIGHT )
+    self.optionPanel:SetWide( self:GetWide() - self.panel:GetWide() - 64 )
 
     for varName, varInfo in pairs( goUI.data.stored ) do
         if varInfo.data and varInfo.data.category ~= categoryId then continue end
@@ -258,7 +272,8 @@ function PANEL:fillOptions( categoryId )
             color = Color( color.r, color.g, color.b, colorAlpha )
 
             local name = varInfo and varInfo.data and varInfo.data.niceName and varInfo.data.niceName or varName
-            draw.SimpleText( name, "goUIMediumLarge-Secondary-Blurred", 28, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            --draw.SimpleText( name, "goUIMediumLarge-Secondary-Blurred", 28, h / 2, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.SimpleText( name, "goUIMediumLarge-Secondary", 28 + 1, h / 2 + 1, Color( 0, 0, 0, 100 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) 
             draw.SimpleText( name, "goUIMediumLarge-Secondary", 28, h / 2, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) 
         end
 
@@ -288,41 +303,11 @@ function PANEL:viewOptions( categoryId, categoryInfo )
     self.panel:AlphaTo( 0, fadeTime, 0, function()
         self.panel:Clear()
 
-        self.header = self.panel:Add( "Panel" )
-        self.header:Dock( TOP )
-        self.header:DockMargin( 0, 0, 0, 8 )
-        self.header:SetTall( 40 )
-
-        self.header.Paint = function( this, w, h )
-            local pCol = goUI.getClientData( "main_color", color_white )
-            if categoryInfo.image then
-                -- Icon image
-                surface.SetMaterial( categoryInfo.image )
-                surface.SetDrawColor( pCol )
-                surface.DrawTexturedRect( 0, 0, 40, 40 )
-            end
-
-            draw.SimpleText( categoryInfo.name, "goUIMediumLarge-Secondary-Blurred", 48, h / 2, Color( pCol.r, pCol.g, pCol.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-            draw.SimpleText( categoryInfo.name, "goUIMediumLarge-Secondary", 48, h / 2, pCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        end
+        self.title:SetText( categoryInfo.name )
 
         self.footer = self.panel:Add( "Panel" )
         self.footer:Dock( BOTTOM )
         self.footer:SetTall( 40 )
-
-        self.resetBtn = self.footer:Add( "goUIButton" )
-        self.resetBtn:Dock( LEFT )
-        self.resetBtn:SetText( "RESET TO DEFAULTS" )
-        self.resetBtn:SetWide( 256 )
-        self.resetBtn.DoClick = function( pnl )
-            goUI.createDialogue( "RESET", "Reset to defaults settings?", "YES", function( dialogue )
-                for a, b in pairs( goUI.data.stored ) do
-                    goUI.setClientData( a, b.default )
-                end
-
-                dialogue:Close()
-            end, "NO", function( dialogue ) dialogue:Close() end )
-        end
 
         self.goBack = self.footer:Add( "goUIButton" )
         self.goBack:Dock( LEFT )
@@ -339,6 +324,20 @@ function PANEL:viewOptions( categoryId, categoryInfo )
             end )
         end
 
+        self.resetBtn = self.footer:Add( "goUIButton" )
+        self.resetBtn:Dock( LEFT )
+        self.resetBtn:SetText( "RESET TO DEFAULTS" )
+        self.resetBtn:SetWide( 256 )
+        self.resetBtn.DoClick = function( pnl )
+            goUI.createDialogue( "RESET", "Reset to defaults settings?", "YES", function( dialogue )
+                for a, b in pairs( goUI.data.stored ) do
+                    goUI.setClientData( a, b.default )
+                end
+
+                dialogue:Close()
+            end, "NO", function( dialogue ) dialogue:Close() end )
+        end
+
         self:fillOptions( categoryId )
 
         self.panel:AlphaTo( 255, fadeTime, 0 )
@@ -346,8 +345,14 @@ function PANEL:viewOptions( categoryId, categoryInfo )
 end
 
 function PANEL:setUp()
-    self.panel = self:Add( "Panel" )
-    self.panel:Dock( FILL )
+    self.outerPanel = self:Add( "Panel" )
+    self.outerPanel:Dock( FILL )
+
+    self.title:SetText( "GAME OPTIONS" )
+
+    self.panel = self.outerPanel:Add( "Panel" )
+    self.panel:SetSize( self:GetWide() * 0.65, self:GetTall() - 64 )
+    self.panel:SetPos( ( ScrW() / 2 ) - ( self.panel:GetWide() / 2 ), 32 )
 
     self.footer = self.panel:Add( "Panel" )
     self.footer:Dock( BOTTOM )

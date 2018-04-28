@@ -161,14 +161,9 @@ function FRAME:setUp()
     self.buttonLayout:SetSize( desiredW, 48 )
     self.buttonLayout:SetPos( ( ScrW() / 2 ) - ( desiredW / 2 ), 0 )
 
-    self.footer = self:Add( "Panel" )
-    self.footer:Dock( BOTTOM )
-    self.footer:DockMargin( 24, 0, 0, 32 )
-    self.footer:SetTall( 40 )
-
     self.panel = self:Add( "Panel" )
     self.panel:Dock( FILL )
-    self.panel:DockMargin( 20, 12, 54, 32 )
+    self.panel:DockMargin( 0, 0, 0, 0 )
     self.panel.Paint = function( pnl, w, h ) end
 
     local widthPerOne = desiredW / ( #goUI.config.ELEMENTS - 1 )
