@@ -36,7 +36,7 @@ goUI.addDataCheck( "staff", function( data, frame )
     local staffGroups = data.staff
     if not staffGroups then return end
 
-    local scroll = frame.panel:Add( "DScrollPanel" )
+    local scroll = frame.panelInner:Add( "DScrollPanel" )
     scroll:Dock( FILL )
 
     local layout = scroll:Add( "DIconLayout" )
@@ -115,7 +115,7 @@ goUI.addDataCheck( "servers", function( data, frame )
     local servers = data.servers
     if not servers then return end
 
-    local label = frame.panel:Add( "DLabel" )
+    local label = frame.panelInner:Add( "DLabel" )
     label:SetText( "Click one of the server buttons below to join our servers!" )
     label:SetFont( "goUILarge-Secondary" )
     label:SetTextColor( color_white )
@@ -124,7 +124,7 @@ goUI.addDataCheck( "servers", function( data, frame )
     label:SizeToContents()
     label:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
 
-    local layout = frame.panel:Add( "DIconLayout" )
+    local layout = frame.panelInner:Add( "DIconLayout" )
     layout:Dock( FILL )
     layout:SetSpaceX( 4 )
     layout:SetSpaceY( 4 )

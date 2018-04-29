@@ -27,10 +27,14 @@ end
 local FRAME = {}
 
 function FRAME:Init()
+    self:DockPadding( 0, 0, 0, 0 )
     self:StretchToParent( 0, 0, 0, 0 )
     self:MakePopup()
 
     self:setUp()
+
+	self:SetFocusTopLevel( true )
+    self:SetKeyBoardInputEnabled( true )
 end
 
 function FRAME:canFade()
@@ -163,8 +167,17 @@ function FRAME:setUp()
 
     self.panel = self:Add( "Panel" )
     self.panel:Dock( FILL )
-    self.panel:DockMargin( 0, 0, 0, 0 )
+    self.panel:DockMargin( 0, 64, 0, 0 )
     self.panel.Paint = function( pnl, w, h ) end
+    self.panel:InvalidateParent( true )
+    self:InvalidateParent( true )
+
+    self.panelInner = self:Add( "DPanel" )
+    self.panelInner:SetSize( self:GetWide() * 0.65, self:GetTall() - 200 )
+    self.panelInner:SetPos( ( ScrW() / 2 ) - ( self.panel:GetWide() / 3 ), self.panel.y )
+    self.panelInner.Paint = function( this )
+        this:SetAlpha( self.panel:GetAlpha() )
+    end
 
     local widthPerOne = desiredW / ( #goUI.config.ELEMENTS - 1 )
     local firstData = goUI.config.ELEMENTS[ 1 ]
@@ -184,6 +197,7 @@ function FRAME:setUp()
         local fadeTime = goUI.getClientData( "element_pressed_fade_time", 0.5 )
         self.panel:AlphaTo( 0, fadeTime, 0, function()
             self.panel:Clear()
+            self.panelInner:Clear()
             self.panel:AlphaTo( 255, fadeTime, 0 )
 
             goUI.getCallback( firstData, self )
@@ -292,6 +306,7 @@ function FRAME:setUp()
             local fadeTime = goUI.getClientData( "element_pressed_fade_time", 0.5 )
             self.panel:AlphaTo( 0, fadeTime, 0, function()
                 self.panel:Clear()
+                self.panelInner:Clear()
                 self.panel:AlphaTo( 255, fadeTime, 0 )
 
                 goUI.getCallback( data, self )
@@ -317,7 +332,7 @@ function FRAME:setUp()
     end
 end
 
-derma.DefineControl( "goUIFrame", nil, FRAME, "DPanel" )
+derma.DefineControl( "goUIFrame", nil, FRAME, "DFrame" )
 
 local BUTTON = {}
 

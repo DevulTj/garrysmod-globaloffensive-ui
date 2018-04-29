@@ -11,13 +11,25 @@ function PANEL:Init()
     self.title:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
     self.title:SetTextColor( color_white )
 
+    self.footerContent = self:Add( "Panel" )
+    self.footerContent:Dock( BOTTOM )
+    self.footerContent:SetTall( 128 )
+    self.footerContent.Paint = function( this, w, h )
+        draw.RoundedBox( 0, 0, 0, w, 3, Color( 255, 255, 255, 5 ) )
+    end
+
+    self.footer = self.footerContent:Add( "Panel" )
+    self.footer:Dock( TOP )
+    self.footer:DockMargin( 128, 0, 0, 0 )
+    self.footer:SetTall( 40 )
+
     self:Dock( FILL )
-    self:DockMargin( 0, 96, 0, 128 )
     self:InvalidateParent( true )
 end
 
 function PANEL:Paint( w, h ) 
     draw.RoundedBox( 0, 0, 32, w, h - 32, Color( 0, 0, 0, 150 ) )
+    draw.RoundedBox( 0, 0, 32, w, 3, Color( 255, 255, 255, 5 ) )
 end
 
 local topRight = Material( "goui/button/button_topright.png" )
@@ -25,8 +37,9 @@ local topRightW, topRightH = 16, 16
 
 function PANEL:createCategoryButton( parent, categoryId, categoryInfo )
     local button = parent:Add( "DButton" )
-    button:SetText( "" )
-    button:SetSize( 350, 250 )
+    button:Dock( TOP )
+    button:SetTall( 48 )
+    button:SetText("")
 
     button.Paint = function( self, w, h )   
         local pCol = goUI.getClientData( "main_color", color_white )
@@ -39,35 +52,8 @@ function PANEL:createCategoryButton( parent, categoryId, categoryInfo )
 
         color = Color( color.r, color.g, color.b, colorAlpha )
 
-        if categoryInfo.image then
-            -- Icon image
-            surface.SetMaterial( categoryInfo.image )
-            surface.SetDrawColor( color )
-            surface.DrawTexturedRect( w / 2 - ( 150 / 2 ), h / 1.75 - ( 150 / 2 ), 150, 150 )
-        end
-
-        surface.SetMaterial( topRight )
-        surface.SetDrawColor( color )
-        surface.DrawTexturedRect( w - topRightW, 0, topRightW, topRightH )
-
-        -- Bottom bar
-        surface.DrawRect( 0, h - 2, w, 2 )
-
-        -- Top bar
-        surface.DrawRect( 0, 0, w - topRightW, 2 )
-
-        -- Left bar
-        surface.DrawRect( 0, 0, 2, h )
-
-        -- Right bar
-        surface.DrawRect( w - 2, topRightH, 2, h - topRightH )
-
-
-        //draw.RoundedBox( 8, 0, 0, w, h, color )
-        //draw.RoundedBox( 8, 2, 2, w - 4, h - 4, Color( 10, 10, 10, 255 ) )
-
-        draw.SimpleText( categoryInfo.name, "goUIMediumLarge-Secondary-Blurred", 28, 36, Color( color.r, color.g, color.b, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( categoryInfo.name, "goUIMediumLarge-Secondary", 28, 36, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( categoryInfo.name, "goUILarge-Secondary", 28 + 1, h/2 + 1, Color( 0, 0, 0, 150 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+        draw.SimpleText( categoryInfo.name, "goUILarge-Secondary", 28, h/2, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
     end
 
     button.DoClick = function( this )
@@ -305,9 +291,7 @@ function PANEL:viewOptions( categoryId, categoryInfo )
 
         self.title:SetText( categoryInfo.name )
 
-        self.footer = self.panel:Add( "Panel" )
-        self.footer:Dock( BOTTOM )
-        self.footer:SetTall( 40 )
+        self.footer:Clear()
 
         self.goBack = self.footer:Add( "goUIButton" )
         self.goBack:Dock( LEFT )
@@ -354,9 +338,7 @@ function PANEL:setUp()
     self.panel:SetSize( self:GetWide() * 0.65, self:GetTall() - 64 )
     self.panel:SetPos( ( ScrW() / 2 ) - ( self.panel:GetWide() / 2 ), 32 )
 
-    self.footer = self.panel:Add( "Panel" )
-    self.footer:Dock( BOTTOM )
-    self.footer:SetTall( 40 )
+    self.footer:Clear()
 
     self.resetBtn = self.footer:Add( "goUIButton" )
     self.resetBtn:Dock( LEFT )
