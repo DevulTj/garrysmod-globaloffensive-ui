@@ -234,7 +234,14 @@ goUI.registerClientConfig(
 )
 
 goUI.registerElement( "HOME", {
-	greeting = "Sample Text.",
+	innerTakesFocus = true,
+
+	avatarWidget = {
+
+	},
+	greeting = "Welcome to BackyardServers.com - please read the rules and enjoy your stay!",
+
+	showURLInner = "https://google.co.uk"
 })
 
 goUI.registerElement( "FORUMS", {
@@ -252,7 +259,7 @@ goUI.registerElement( "STAFF", {
 		},
 		[ "superadmin" ] = {
 			name = "Senior Administrator",
-			color = Color( 51, 125, 255 ),
+			color = Color( 255, 255, 0 ),
 		},
 		[ "founder" ] = {
 			name = "Founder",
@@ -264,7 +271,9 @@ goUI.registerElement( "STAFF", {
 			color = Color( 255, 200, 0 ),
 		},
 		]]
-	}
+	},
+
+	innerTakesFocus = true
 })
 
 --[[
@@ -294,7 +303,9 @@ goUI.registerElement( "SERVERS", {
 
 			joinText = "JOIN"
 		}
-	}
+	},
+
+	innerTakesFocus = true
 })
 
 goUI.registerElement( "RULES", {

@@ -109,3 +109,7 @@ goUI.registerElement = function( name, data )
         goUI.config.ELEMENTS_TO_ID[ name ] = id
     end
 end
+
+goUI.getElement = function( nameOrId )
+    return isnumber( nameOrId ) and goUI.config.ELEMENTS[ nameOrId ] or goUI.config.ELEMENTS_TO_ID[ nameOrId ] and goUI.config.ELEMENTS[ goUI.config.ELEMENTS_TO_ID[ nameOrId ] ]
+end

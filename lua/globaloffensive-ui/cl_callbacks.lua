@@ -18,6 +18,13 @@ goUI.addDataCheck( "showURL", function( data, frame )
     html:OpenURL( data.showURL )
 end )
 
+goUI.addDataCheck( "showURLInner", function( data, frame )
+    local html = frame.panelInner:Add( "HTML" )
+    html:Dock( FILL )
+    html:DockMargin( 0, 4, 4, 4 )
+    html:OpenURL( data.showURLInner )
+end )
+
 goUI.addDataCheck( "text", function( data, frame )
     local label = frame.panel:Add( "DLabel" )
     label:Dock( FILL )
@@ -108,6 +115,76 @@ goUI.addDataCheck( "staff", function( data, frame )
                 end
             end
         end
+    end
+end )
+
+goUI.addDataCheck( "avatarWidget", function( data, frame )
+    local panelHeader = frame.panelInner:Add( "Panel" )
+    panelHeader:SetTall( 140 )
+    panelHeader:Dock( TOP )
+    
+    local panel = panelHeader:Add( "DPanel" )
+    panel:Dock( LEFT )
+    panel:SetWide( panelHeader:GetTall() * 2 )
+
+    panel.Paint = function( this, w, h )
+        draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 20, 20, 150 ) )
+    end
+    panel:InvalidateParent( true )
+
+    local avatarHeader = panel:Add( "Panel" )
+    avatarHeader:Dock( TOP )
+    avatarHeader:DockPadding( 4, 4, 4, 4 )
+    avatarHeader:SetTall( 64 + 4 + 4 )
+
+    local avatar = avatarHeader:Add( "AvatarImage" )
+    avatar:SetPlayer( LocalPlayer(), 64 )
+    avatar:Dock( LEFT )
+    avatar:SetWide( 64 )
+
+    local name = avatarHeader:Add( "DLabel" )
+    name:Dock( TOP )
+    name:SetTall( 32 )
+    name:DockMargin( 4, 6, 0, 0 )
+    name:SetText( LocalPlayer():Nick() )
+    name:SetFont( "goUILarge" )
+    name:SetTextColor( color_white )
+    name:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
+
+
+    local RANK_DATA = goUI.getElement( "STAFF" )
+    local userGroup = LocalPlayer():GetUserGroup()
+    local userGroupColor
+    if RANK_DATA then
+        if RANK_DATA.staff[ userGroup ] then
+            local cachedUserGroup = userGroup
+
+            userGroup = RANK_DATA.staff[ cachedUserGroup ].name
+            userGroupColor = RANK_DATA.staff[ cachedUserGroup ].color
+        end
+    end
+
+    local rank = avatarHeader:Add( "DLabel" )
+    rank:Dock( TOP )
+    rank:SetTall( 16 )
+    rank:DockMargin( 4, 0, 0, 0 )
+    rank:SetText( userGroup )
+    rank:SetFont( "goUIMedium" )
+    rank:SetTextColor( userGroupColor or color_white )
+    rank:SetExpensiveShadow( 1, Color( 0, 0, 0, 150 ) )
+
+    local footer = panel:Add( "DPanel" )
+    footer:SetTall( 64 )
+    footer:Dock( BOTTOM )
+    footer:DockMargin( 4, 4, 4, 4 )
+    footer:InvalidateParent( true )
+
+    local TEAM_COLOR = team.GetColor( LocalPlayer():Team() )
+    footer.Paint = function( this, w, h )
+        draw.RoundedBox( 0, 0, 0, w, h, Color( TEAM_COLOR.r, TEAM_COLOR.g, TEAM_COLOR.b, 120 ) )
+
+        draw.SimpleText( team.GetName( LocalPlayer():Team() ), "goUILarge", w/2 + 1, h/2 + 1, Color( 0, 0, 0, 150 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText( team.GetName( LocalPlayer():Team() ), "goUILarge", w/2, h/2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
 end )
 
@@ -306,7 +383,7 @@ end )
 
 local gradient = Material( "gui/gradient" )
 goUI.addDataCheck( "greeting", function( data, frame )
-    frame.greeting = frame.panel:Add( "DLabel" )
+    frame.greeting = frame.panelInner:Add( "DLabel" )
     frame.greeting:Dock( TOP )
     frame.greeting:DockMargin( 0, 0, 0, 8 )
     frame.greeting:SetText( data.greeting )
@@ -314,6 +391,7 @@ goUI.addDataCheck( "greeting", function( data, frame )
     frame.greeting:SetTextColor( goUI.getClientData( "main_color", color_white ) )
     frame.greeting:SetExpensiveShadow( 1, Color( 0, 0, 0, 185 ) )
     frame.greeting:SizeToContents()
+    frame.greeting:SetMultiline( true )
 end )
 
 local funcs = {

@@ -156,7 +156,13 @@ function FRAME:setUp()
     self.buttonLayoutContainer:SetTall( 48 )
     
     self.buttonLayoutContainer.Paint = function( this, w, h )
-        draw.RoundedBox( 0, 0, 0, w, 48, Color( 0, 0, 0, 200 ) )
+        BSHADOWS.BeginShadow()
+            draw.RoundedBox( 0, 0, 0, w, 48, Color( 0, 0, 20, 150 ) )
+        BSHADOWS.EndShadow(1, 2, 2)
+        
+        BSHADOWS.BeginShadow()
+            draw.RoundedBox( 0, 0, h - 2, w, 2, Color( 0, 0, 0, 10 ) )
+        BSHADOWS.EndShadow(4, 2, 2)
     end
 
     local desiredW = ScrW() * 0.55
@@ -198,6 +204,7 @@ function FRAME:setUp()
         self.panel:AlphaTo( 0, fadeTime, 0, function()
             self.panel:Clear()
             self.panelInner:Clear()
+            self.panel:MoveToFront()
             self.panel:AlphaTo( 255, fadeTime, 0 )
 
             goUI.getCallback( firstData, self )
@@ -307,6 +314,13 @@ function FRAME:setUp()
             self.panel:AlphaTo( 0, fadeTime, 0, function()
                 self.panel:Clear()
                 self.panelInner:Clear()
+
+                if data.innerTakesFocus then
+                    self.panelInner:MoveToFront()
+                else
+                    self.panel:MoveToFront()
+                end
+
                 self.panel:AlphaTo( 255, fadeTime, 0 )
 
                 goUI.getCallback( data, self )
