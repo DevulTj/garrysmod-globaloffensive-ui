@@ -31,5 +31,5 @@ end
 findInFolder( "globaloffensive-ui/" )
 
 if SERVER then
-	resource.AddWorkshop( "1165844047" )
+	resource.AddWorkshop( "1373295374" )
 end

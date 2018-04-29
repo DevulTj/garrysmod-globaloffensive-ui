@@ -1,0 +1,19 @@
+{
+    "description": "\n\n",
+    "ignore": [
+        "*.psd",
+        "*.jpg",
+        "*.vcproj",
+        "*.svn*",
+        ".git/*",
+        "*.txt",
+        ".gitattributes",
+        ".gitignore"
+    ],
+    "logo": "D:/SteamLibrary/steamapps/common/GarrysMod/garrysmod/addons/goui-content/addonLogo.jpg",
+    "tags": [
+        "fun"
+    ],
+    "title": "Global Offensive UI - Content Pack",
+    "type": "gamemode"
+}
