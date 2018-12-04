@@ -2,6 +2,10 @@
 ### Created by [DevulTj](https://steamcommunity.com/id/devul)
 ###### There is currently no promotional material at this time.
 
+As of 4th December 2018, I've released Global Offensive UI for free on GitHub.
+
+Enjoy!
+
 Global Offensive UI is a realistic reimagination of Counter-Strike: Global Offensive's main menu system, designed for server owners. You can customize this interface to your greatest needs and desires. It has in-depth customization with a client based settings panel and server-based configurations. It also features a fantastic UI with great animations and graphical fidelity.
 
 # Features
