@@ -39,6 +39,7 @@ Global Offensive UI is a realistic reimagination of Counter-Strike: Global Offen
 # Credits
 
 - Made by [DevulTj](https://steamcommunity.com/id/devul)
+- Blue's Shadows and Masks by CODE BLUE.
 
 ## Other scripts you'll love
 - [NLR Enforcer for DarkRP](https://scriptfodder.com/scripts/view/2791)
